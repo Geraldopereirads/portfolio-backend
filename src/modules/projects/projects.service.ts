@@ -1,11 +1,7 @@
-import {
-  ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { CreateProjectsDto } from './Dto/create-projects.dto';
-import { ProjectsRepository } from './repositories/projects.repository';
-import { UpdateProjectsDto } from './Dto/update-projects.dto';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {CreateProjectsDto} from './Dto/create-projects.dto';
+import {ProjectsRepository} from './repositories/projects.repository';
+import {UpdateProjectsDto} from './Dto/update-projects.dto';
 
 @Injectable()
 export class ProjectsService {
