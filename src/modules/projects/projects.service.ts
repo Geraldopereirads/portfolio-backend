@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateProjectsDto } from './Dto/create-projects.dto';
 import { ProjectsRepository } from './repositories/projects.repository';
 import { UpdateProjectsDto } from './Dto/update-projects.dto';
@@ -22,20 +26,35 @@ export class ProjectsService {
 
   async findAll() {
     const projects = await this.projectsRepository.findAll();
+
     return projects;
   }
 
   async findOne(id: string) {
     const projects = await this.projectsRepository.findOne(id);
+
+    if (!projects) {
+      throw new NotFoundException('Project not found');
+    }
+
     return projects;
   }
 
   async update(data: UpdateProjectsDto, id: string) {
     const projects = await this.projectsRepository.update(data, id);
+
+    if (!projects) {
+      throw new NotFoundException('Project not found');
+    }
+
     return projects;
   }
 
   async remove(id: string) {
-    await this.projectsRepository.remove(id);
+    const projects = await this.projectsRepository.remove(id);
+
+    if (!projects) {
+      throw new NotFoundException('Project not found');
+    }
   }
 }
