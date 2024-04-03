@@ -23,8 +23,10 @@ export class ProjectsPrismaRepository implements ProjectsRepository {
   }
 
   async findAll(): Promise<Projects[]> {
-    throw new Error('Method not implemented.');
+    const projects = await this.prisma.projects.findMany();
+    return plainToInstance(Projects, projects);
   }
+
   async findOne(id: string): Promise<Projects> {
     throw new Error('Method not implemented.');
   }
