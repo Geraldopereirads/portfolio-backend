@@ -15,7 +15,7 @@ datasource db {
 
 model Projects {
   id          String  @id
-  title       String
+  title       String  @unique
   image       String?
   url         String
   github      String

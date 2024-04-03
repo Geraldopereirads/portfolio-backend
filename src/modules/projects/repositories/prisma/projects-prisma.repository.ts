@@ -27,10 +27,11 @@ export class ProjectsPrismaRepository implements ProjectsRepository {
     return plainToInstance(Projects, projects);
   }
 
-  async findOne(id: string): Promise<Projects> {
+  async findByTitle(title: string): Promise<Projects> {
     throw new Error('Method not implemented.');
   }
-  async findByTitle(title: string): Promise<Projects> {
+
+  async findOne(id: string): Promise<Projects> {
     throw new Error('Method not implemented.');
   }
   async update(data: UpdateProjectsDto, id: string): Promise<Projects> {
