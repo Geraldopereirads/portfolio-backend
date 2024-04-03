@@ -50,7 +50,10 @@ export class ProjectsPrismaRepository implements ProjectsRepository {
 
     return plainToInstance(Projects, projects);
   }
-  async remove(id: string): Promise<null> {
-    throw new Error('Method not implemented.');
+
+  async remove(id: string): Promise<void> {
+    await this.prisma.projects.delete({
+      where: {id},
+    });
   }
 }
