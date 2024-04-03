@@ -43,7 +43,12 @@ export class ProjectsPrismaRepository implements ProjectsRepository {
   }
 
   async update(data: UpdateProjectsDto, id: string): Promise<Projects> {
-    throw new Error('Method not implemented.');
+    const projects = await this.prisma.projects.update({
+      where: {id},
+      data: {...data},
+    });
+
+    return plainToInstance(Projects, projects);
   }
   async remove(id: string): Promise<null> {
     throw new Error('Method not implemented.');
