@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFullstackDto } from './dto/create-fullstack.dto';
-import { UpdateFullstackDto } from './dto/update-fullstack.dto';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {CreateFullstackDto} from './dto/create-fullstack.dto';
+import {UpdateFullstackDto} from './dto/update-fullstack.dto';
+import {FullStackRepository} from './repositories/fullstack.repository';
 
 @Injectable()
 export class FullstackService {
-  create(createFullstackDto: CreateFullstackDto) {
-    return 'This action adds a new fullstack';
+  constructor(private fullstackRepository: FullStackRepository) {}
+  async create(createFullstackDto: CreateFullstackDto) {
+    const findFullStack = await this.fullstackRepository.findByTitle(
+      createFullstackDto.title,
+    );
+
+    if (findFullStack) {
+      throw new ConflictException('FullStack already exists');
+    }
+
+    const fullstack = await this.fullstackRepository.create(createFullstackDto);
+
+    return fullstack;
   }
 
-  findAll() {
-    return `This action returns all fullstack`;
+  async findAll() {
+    const fullstack = await this.fullstackRepository.findAll();
+    return fullstack;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} fullstack`;
+  async findOne(id: string) {
+    const fullstack = await this.fullstackRepository.findOne(id);
+
+    if (!fullstack) {
+      throw new NotFoundException('FullStack not found');
+    }
+
+    return fullstack;
   }
 
-  update(id: number, updateFullstackDto: UpdateFullstackDto) {
-    return `This action updates a #${id} fullstack`;
+  async update(id: string, data: UpdateFullstackDto) {
+    const fullstack = await this.fullstackRepository.update(data, id);
+
+    if (!fullstack) {
+      throw new NotFoundException('FullStack not found');
+    }
+
+    return fullstack;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} fullstack`;
+  async remove(id: string) {
+    await this.fullstackRepository.remove(id);
   }
 }

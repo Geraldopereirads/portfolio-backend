@@ -1,6 +1,6 @@
 import {randomUUID} from 'crypto';
 
-export class Fullstack {
+export class FullStack {
   readonly id: string;
   title: string;
   image: string | null;
