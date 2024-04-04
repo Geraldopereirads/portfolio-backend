@@ -1,13 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { FrontendService } from './frontend.service';
-import { CreateFrontendDto } from './dto/create-frontend.dto';
-import { UpdateFrontendDto } from './dto/update-frontend.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
+import {FrontendService} from './frontend.service';
+import {CreateFrontendDto} from './dto/create-frontend.dto';
+import {UpdateFrontendDto} from './dto/update-frontend.dto';
 
 @Controller('frontend')
 export class FrontendController {
   constructor(private readonly frontendService: FrontendService) {}
 
-  @Post()
+  @Post('')
   create(@Body() createFrontendDto: CreateFrontendDto) {
     return this.frontendService.create(createFrontendDto);
   }
@@ -19,16 +28,20 @@ export class FrontendController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.frontendService.findOne(+id);
+    return this.frontendService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFrontendDto: UpdateFrontendDto) {
-    return this.frontendService.update(+id, updateFrontendDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateFrontendDto: UpdateFrontendDto,
+  ) {
+    return this.frontendService.update(updateFrontendDto, id);
   }
 
+  @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.frontendService.remove(+id);
+    return this.frontendService.remove(id);
   }
 }
