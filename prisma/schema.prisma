@@ -45,3 +45,14 @@ model Frontend {
 
   @@map("frontend")
 }
+
+model FullStack {
+  id          String  @id
+  title       String  @unique
+  image       String?
+  url         String
+  github      String
+  description String
+
+  @@map("fullstack")
+}
