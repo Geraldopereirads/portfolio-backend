@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
-import { CreateBackendDto } from './dto/create-backend.dto';
-import { UpdateBackendDto } from './dto/update-backend.dto';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {CreateBackendDto} from './dto/create-backend.dto';
+import {UpdateBackendDto} from './dto/update-backend.dto';
+import {BackendRepository} from './repositories/backend.repository';
 
 @Injectable()
 export class BackendService {
-  create(createBackendDto: CreateBackendDto) {
-    return 'This action adds a new backend';
+  constructor(private backendRepository: BackendRepository) {}
+  async create(createBackendDto: CreateBackendDto) {
+    const findBackend = await this.backendRepository.findByTitle(
+      createBackendDto.title,
+    );
+
+    if (findBackend) {
+      throw new ConflictException('Backend already exists');
+    }
+
+    const backend = await this.backendRepository.create(createBackendDto);
+
+    return backend;
   }
 
-  findAll() {
-    return `This action returns all backend`;
+  async findAll() {
+    const backend = await this.backendRepository.findAll();
+    return backend;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} backend`;
+  async findOne(id: string) {
+    const backend = await this.backendRepository.findOne(id);
+
+    if (!backend) {
+      throw new NotFoundException('Backend not found');
+    }
+
+    return backend;
   }
 
-  update(id: number, updateBackendDto: UpdateBackendDto) {
-    return `This action updates a #${id} backend`;
+  async update(data: UpdateBackendDto, id: string) {
+    const backend = await this.backendRepository.update(data, id);
+
+    if (!backend) {
+      throw new NotFoundException('Backend not found');
+    }
+
+    return backend;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} backend`;
+  async remove(id: string) {
+    await this.backendRepository.remove(id);
   }
 }
