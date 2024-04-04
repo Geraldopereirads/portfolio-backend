@@ -1,26 +1,52 @@
-import { Injectable } from '@nestjs/common';
-import { CreateFrontendDto } from './dto/create-frontend.dto';
-import { UpdateFrontendDto } from './dto/update-frontend.dto';
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {CreateFrontendDto} from './dto/create-frontend.dto';
+import {UpdateFrontendDto} from './dto/update-frontend.dto';
+import {FrontEndRepository} from './repositories/frontend.repository';
 
 @Injectable()
 export class FrontendService {
-  create(createFrontendDto: CreateFrontendDto) {
-    return 'This action adds a new frontend';
+  constructor(private frontendRepository: FrontEndRepository) {}
+  async create(createFrontendDto: CreateFrontendDto) {
+    const findFrontEnd = await this.frontendRepository.findByTitle(
+      createFrontendDto.title,
+    );
+
+    if (findFrontEnd) {
+      throw new ConflictException('FrontEnd already exists');
+    }
+
+    const frontend = await this.frontendRepository.create(createFrontendDto);
+
+    return frontend;
   }
 
-  findAll() {
-    return `This action returns all frontend`;
+  async findAll() {
+    const frontend = await this.frontendRepository.findAll();
+
+    return frontend;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} frontend`;
+  async findOne(id: string) {
+    const frontend = await this.frontendRepository.findOne(id);
+
+    if (!frontend) {
+      throw new NotFoundException('FrontEnd not found');
+    }
+
+    return frontend;
   }
 
-  update(id: number, updateFrontendDto: UpdateFrontendDto) {
-    return `This action updates a #${id} frontend`;
+  async update(data: UpdateFrontendDto, id: string) {
+    const frontend = await this.frontendRepository.update(data, id);
+
+    if (!frontend) {
+      throw new NotFoundException('FrontEnd not found');
+    }
+
+    return frontend;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} frontend`;
+  async remove(id: string) {
+    await this.frontendRepository.remove(id);
   }
 }
