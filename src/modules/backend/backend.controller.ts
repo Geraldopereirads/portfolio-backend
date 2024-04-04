@@ -1,13 +1,22 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { BackendService } from './backend.service';
-import { CreateBackendDto } from './dto/create-backend.dto';
-import { UpdateBackendDto } from './dto/update-backend.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  HttpCode,
+} from '@nestjs/common';
+import {BackendService} from './backend.service';
+import {CreateBackendDto} from './dto/create-backend.dto';
+import {UpdateBackendDto} from './dto/update-backend.dto';
 
 @Controller('backend')
 export class BackendController {
   constructor(private readonly backendService: BackendService) {}
 
-  @Post()
+  @Post('')
   create(@Body() createBackendDto: CreateBackendDto) {
     return this.backendService.create(createBackendDto);
   }
@@ -19,16 +28,17 @@ export class BackendController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.backendService.findOne(+id);
+    return this.backendService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBackendDto: UpdateBackendDto) {
-    return this.backendService.update(+id, updateBackendDto);
+    return this.backendService.update(updateBackendDto, id);
   }
 
+  @HttpCode(204)
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.backendService.remove(+id);
+    return this.backendService.remove(id);
   }
 }
