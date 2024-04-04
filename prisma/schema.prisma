@@ -23,3 +23,25 @@ model Projects {
 
   @@map("projects")
 }
+
+model Backend {
+  id          String  @id
+  title       String  @unique
+  image       String?
+  url         String
+  github      String
+  description String
+
+  @@map("backend")
+}
+
+model Frontend {
+  id          String  @id
+  title       String  @unique
+  image       String?
+  url         String
+  github      String
+  description String
+
+  @@map("frontend")
+}

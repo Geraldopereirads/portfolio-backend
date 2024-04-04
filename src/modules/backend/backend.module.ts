@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { BackendService } from './backend.service';
-import { BackendController } from './backend.controller';
+import {Module} from '@nestjs/common';
+import {BackendService} from './backend.service';
+import {BackendController} from './backend.controller';
 
 @Module({
   controllers: [BackendController],

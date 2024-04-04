@@ -1,4 +1,3 @@
-import {CreateProjectsDto} from './Dto/create-projects.dto';
 import {
   Body,
   Controller,
@@ -9,8 +8,9 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import {ProjectsService} from './projects.service';
+import {CreateProjectsDto} from './Dto/create-projects.dto';
 import {UpdateProjectsDto} from './Dto/update-projects.dto';
+import {ProjectsService} from './projects.service';
 
 @Controller('projects')
 export class ProjectsController {
