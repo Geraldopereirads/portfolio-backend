@@ -47,10 +47,6 @@ export class ProjectsService {
   }
 
   async remove(id: string) {
-    const projects = await this.projectsRepository.remove(id);
-
-    if (!projects) {
-      throw new NotFoundException('Project not found');
-    }
+    await this.projectsRepository.remove(id);
   }
 }
