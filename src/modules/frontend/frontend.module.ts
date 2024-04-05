@@ -1,3 +1,4 @@
+import {PrismaService} from './../database/prisma.service';
 import {FrontendPrismaRepository} from './repositories/prisma/frontend-prisma.repository';
 import {Module} from '@nestjs/common';
 import {FrontendService} from './frontend.service';
@@ -8,6 +9,7 @@ import {FrontEndRepository} from './repositories/frontend.repository';
   controllers: [FrontendController],
   providers: [
     FrontendService,
+    PrismaService,
     {
       provide: FrontEndRepository,
       useClass: FrontendPrismaRepository,
