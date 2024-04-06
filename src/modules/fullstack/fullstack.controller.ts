@@ -11,7 +11,9 @@ import {
 import {FullstackService} from './fullstack.service';
 import {CreateFullstackDto} from './dto/create-fullstack.dto';
 import {UpdateFullstackDto} from './dto/update-fullstack.dto';
+import {ApiTags} from '@nestjs/swagger';
 
+@ApiTags('FullStack')
 @Controller('fullstack')
 export class FullstackController {
   constructor(private readonly fullstackService: FullstackService) {}

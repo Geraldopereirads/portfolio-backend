@@ -11,7 +11,9 @@ import {
 import {FrontendService} from './frontend.service';
 import {CreateFrontendDto} from './dto/create-frontend.dto';
 import {UpdateFrontendDto} from './dto/update-frontend.dto';
+import {ApiTags} from '@nestjs/swagger';
 
+@ApiTags('FrontEnd')
 @Controller('frontend')
 export class FrontendController {
   constructor(private readonly frontendService: FrontendService) {}

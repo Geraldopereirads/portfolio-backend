@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateFullstackDto } from './create-fullstack.dto';
+import {PartialType} from '@nestjs/swagger';
+import {CreateFullstackDto} from './create-fullstack.dto';
 
 export class UpdateFullstackDto extends PartialType(CreateFullstackDto) {}
