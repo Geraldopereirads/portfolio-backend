@@ -7,11 +7,14 @@ import {
   Param,
   Delete,
   HttpCode,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import {FullstackService} from './fullstack.service';
 import {CreateFullstackDto} from './dto/create-fullstack.dto';
 import {UpdateFullstackDto} from './dto/update-fullstack.dto';
 import {ApiTags} from '@nestjs/swagger';
+import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
 @ApiTags('FullStack')
 @Controller('fullstack')
@@ -45,5 +48,18 @@ export class FullstackController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.fullstackService.remove(id);
+  }
+
+  @Patch('upload/:id')
+  @UseInterceptors(FileFieldsInterceptor([{name: 'image', maxCount: 1}]))
+  upload(
+    @UploadedFiles()
+    files: {
+      image?: Express.Multer.File;
+    },
+    @Param('id') id: string,
+  ) {
+    const {image} = files;
+    return this.fullstackService.upload(image[0], id);
   }
 }
