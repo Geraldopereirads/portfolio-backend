@@ -7,11 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import {BackendService} from './backend.service';
 import {CreateBackendDto} from './dto/create-backend.dto';
 import {UpdateBackendDto} from './dto/update-backend.dto';
 import {ApiTags} from '@nestjs/swagger';
+import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
 @ApiTags('BackEnd')
 @Controller('backend')
@@ -42,5 +45,18 @@ export class BackendController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.backendService.remove(id);
+  }
+
+  @Patch('upload/:id')
+  @UseInterceptors(FileFieldsInterceptor([{name: 'image', maxCount: 1}]))
+  upload(
+    @UploadedFiles()
+    files: {
+      image?: Express.Multer.File;
+    },
+    @Param('id') id: string,
+  ) {
+    const {image} = files;
+    return this.backendService.upload(image[0], id);
   }
 }
