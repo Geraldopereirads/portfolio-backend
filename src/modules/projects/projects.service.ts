@@ -1,7 +1,9 @@
+import {unlink} from 'node:fs';
 import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import {CreateProjectsDto} from './Dto/create-projects.dto';
 import {ProjectsRepository} from './repositories/projects.repository';
 import {UpdateProjectsDto} from './Dto/update-projects.dto';
+import {v2 as cloudinary} from 'cloudinary';
 
 @Injectable()
 export class ProjectsService {
@@ -44,6 +46,39 @@ export class ProjectsService {
     }
 
     return projects;
+  }
+
+  async upload(image?: Express.Multer.File, id?: string) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUD_NAME,
+      api_key: process.env.API_KEY,
+      api_secret: process.env.API_SECRET,
+    });
+
+    const findImage = await this.projectsRepository.findOne(id);
+
+    if (!findImage) {
+      throw new NotFoundException('Image not found');
+    }
+
+    const uploadImage = await cloudinary.uploader.upload(
+      image.path,
+      {resource_type: 'image'},
+      (error, result) => result,
+    );
+
+    const updateImage = await this.projectsRepository.update(
+      {
+        image: uploadImage.secure_url,
+      },
+      id,
+    );
+
+    unlink(image.path, (error) => {
+      if (error) console.log(error);
+    });
+
+    return updateImage;
   }
 
   async remove(id: string) {

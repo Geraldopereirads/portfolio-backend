@@ -7,11 +7,14 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
 import {CreateProjectsDto} from './Dto/create-projects.dto';
 import {UpdateProjectsDto} from './Dto/update-projects.dto';
 import {ProjectsService} from './projects.service';
 import {ApiTags} from '@nestjs/swagger';
+import {FileFieldsInterceptor} from '@nestjs/platform-express';
 
 @ApiTags('Projects')
 @Controller('projects')
@@ -44,5 +47,18 @@ export class ProjectsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.projectsService.remove(id);
+  }
+
+  @Patch('upload/:id')
+  @UseInterceptors(FileFieldsInterceptor([{name: 'image', maxCount: 1}]))
+  upload(
+    @UploadedFiles()
+    files: {
+      image?: Express.Multer.File;
+    },
+    @Param('id') id: string,
+  ) {
+    const {image} = files;
+    return this.projectsService.upload(image[0], id);
   }
 }
